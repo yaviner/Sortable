@@ -1500,14 +1500,19 @@
 	}
 
 	function _saveInputCheckedState(root) {
-		savedInputChecked.length = 0;
-
 		var inputs = root.getElementsByTagName('input');
 		var idx = inputs.length;
 
 		while (idx--) {
 			var el = inputs[idx];
-			el.checked && savedInputChecked.push(el);
+			var i = savedInputChecked.indexOf(el);
+			if (el.checked && i < 0) {
+				// el checked and not already in array
+				savedInputChecked.push(el);
+			} else if (el.checked === false && i >= 0) {
+				// el unchecked but in array
+				savedInputChecked.splice(i, 1);
+			}
 		}
 	}
 
